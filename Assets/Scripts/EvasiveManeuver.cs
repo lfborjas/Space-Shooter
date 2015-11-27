@@ -10,9 +10,14 @@ public class EvasiveManeuver : MonoBehaviour {
 
 	private float targetManeuver, currentSpeed;
 	private Rigidbody rb;
+	private Transform playerTransform;
 
 	void Start(){
 		rb = GetComponent<Rigidbody> ();
+		GameObject player = GameObject.FindGameObjectWithTag ("Player");
+		if (player != null){
+				playerTransform = player.transform;
+		}
 		currentSpeed = rb.velocity.z;
 		StartCoroutine (Evade ());
 	}
@@ -23,7 +28,17 @@ public class EvasiveManeuver : MonoBehaviour {
 		while (true) {
 			// go towards some random point,
 			// use -Sign to make it swerve towards the center rather than the edges
-			targetManeuver = Random.Range (1, dodge) * -Mathf.Sign(transform.position.x);
+			float finalManeuver = Random.Range (1, dodge) * -Mathf.Sign(transform.position.x); 
+			if ((Random.value > 0.5f) && playerTransform != null){
+				targetManeuver = finalManeuver;
+			} else {
+				// sometimes, go towards the player
+				try{
+					targetManeuver = playerTransform.position.x;
+				}catch{
+					targetManeuver = finalManeuver;
+				}
+			}
 			yield return new WaitForSeconds (Random.Range (maneuverTime.x, maneuverTime.y));
 			// go towards origin
 			targetManeuver = 0.0f;
