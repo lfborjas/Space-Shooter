@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-	public GameObject hazard;
+	//public GameObject hazard;
+	public GameObject[] hazards;
 	public Vector3 spawnValues;
 	public int hazardCount;
 	public float spawnWait;
@@ -37,6 +38,11 @@ public class GameController : MonoBehaviour {
 		// keep creating waves until the player dies
 		while(true){
 			for (int i = 0; i < hazardCount; i++) {
+
+				// all kinds of things could be here: powerups, enemies, etc.
+				// in Unity, we just dragged the asteroids from the prefabs to a locked "hazards" property for
+				// the GameController
+				GameObject hazard = hazards[Random.Range(0,hazards.Length)];
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
