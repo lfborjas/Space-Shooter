@@ -24,18 +24,21 @@ public class DestroyByContact : MonoBehaviour {
 		//the camera on the boundary and seeing that the asteroid crosses it.
 		//Debug.Log (other.name);
 
-		if (other.CompareTag ("Boundary")) {
+		if (other.CompareTag ("Boundary") || other.CompareTag("Enemy")) {
 			return;
 		}
-		//destroy the asteroid
-		Instantiate (explosion, transform.position, transform.rotation);
+
+		if (explosion != null) {
+			//destroy the asteroid/enemy
+			Instantiate (explosion, transform.position, transform.rotation);
+		}
 
 		if (other.CompareTag ("Player")) {
 			Instantiate (playerExplosion, other.transform.position, other.transform.rotation);
 			gameController.GameOver();
 		}
 
-		// gameController.addScore (scoreValue);
+		gameController.addScore (scoreValue);
 
 		// destroy the laser bolt or player
 		Destroy (other.gameObject);
