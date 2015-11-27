@@ -13,15 +13,34 @@ public class Boundary{
 
 public class PlayerController : MonoBehaviour {
 	private Rigidbody _rigidbody;
+	private float nextFire = 0.0f;
 
 	// public vars can be set from the properties in Unity itself
 	public float speed, tilt;
 	public Boundary boundary;
 
+	public GameObject shot;
+	//if we declare this as a transform, Unity will be smart enough to reach into
+	//the referenced game object and use its transform, without having to do spawn.transform
+	public Transform shotSpawn;
+	public float fireRate = 0.5F;
+
+
 	void Start(){
 		// gotta use GetComponent here because unity 5 no longer has the "shorthand"
 		// getters
 		_rigidbody = GetComponent<Rigidbody> ();
+	}
+
+	// firing a shot doesn't require physics, so let's not wait for
+	// FixedUpdate
+	void Update(){
+		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+			nextFire = Time.time + fireRate;
+			// in the inspectors, rotation quaternions are simplified as Euler quaternions
+			//GameObject clone = Instantiate(shot, shotSpawn.position, shotSpawn.rotation) as GameObject;
+			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+		}
 	}
 
 	// called just before each fixed physics step
