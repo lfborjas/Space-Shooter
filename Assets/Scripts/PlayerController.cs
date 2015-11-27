@@ -13,6 +13,7 @@ public class Boundary{
 
 public class PlayerController : MonoBehaviour {
 	private Rigidbody _rigidbody;
+	private AudioSource _audio;
 	private float nextFire = 0.0f;
 
 	// public vars can be set from the properties in Unity itself
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour {
 		// gotta use GetComponent here because unity 5 no longer has the "shorthand"
 		// getters
 		_rigidbody = GetComponent<Rigidbody> ();
+		_audio = GetComponent<AudioSource> ();
 	}
 
 	// firing a shot doesn't require physics, so let's not wait for
@@ -40,7 +42,8 @@ public class PlayerController : MonoBehaviour {
 			// in the inspectors, rotation quaternions are simplified as Euler quaternions
 			//GameObject clone = Instantiate(shot, shotSpawn.position, shotSpawn.rotation) as GameObject;
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-		}
+			_audio.Play ();
+		}	
 	}
 
 	// called just before each fixed physics step
