@@ -4,6 +4,18 @@ using System.Collections;
 public class DestroyByContact : MonoBehaviour {
 	public GameObject explosion;
 	public GameObject playerExplosion;
+	public int scoreValue;
+	private GameController gameController;
+
+	void Start(){
+		GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
+		if (gameControllerObject != null) {
+			gameController = gameControllerObject.GetComponent<GameController>();
+		}
+		if (gameController == null) {
+			Debug.Log("Cannot find 'GameController' script!");
+		}
+	}
 
 	void OnTriggerEnter(Collider other){
 		//on a first iteration, this was called with the Boundary and
@@ -21,6 +33,8 @@ public class DestroyByContact : MonoBehaviour {
 		if (other.CompareTag ("Player")) {
 			Instantiate (playerExplosion, other.transform.position, other.transform.rotation);
 		}
+
+		gameController.addScore (scoreValue);
 
 		// destroy the laser bolt or player
 		Destroy (other.gameObject);
